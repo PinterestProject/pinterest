@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, UserManager
 from django.contrib.auth import get_user_model
-from Boards.models import Board
+# from Boards.models import Board
 
 class UserManager(BaseUserManager):
     """
