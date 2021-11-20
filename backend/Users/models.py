@@ -83,7 +83,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class Invitation(models.Model):
 
-    collaborator = models.CharField(max_length=250)
+    collaborator = models.CharField(max_length=250,null=True)
     can_edit = models.BooleanField(default=True)
     user_board_id = models.ForeignKey('User_board', on_delete=models.CASCADE)
 
