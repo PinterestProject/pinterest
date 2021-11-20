@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, UserManager
 from django.contrib.auth import get_user_model
-
+from Boards.models import Board
 
 class UserManager(BaseUserManager):
     """
@@ -79,3 +79,20 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
 
         return self.email
+
+
+class Invitation(models.Model):
+
+    collaborator = models.CharField(max_length=250)
+    can_edit = models.BooleanField(default=True)
+    user_board_id = models.ForeignKey('User_board', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.collaborator
+
+
+class User_board(models.Model):
+
+    user_id = models.ForeignKey('User', on_delete=models.CASCADE)
+    board_id = models.ForeignKey('Board', on_delete=models.CASCADE )
+
