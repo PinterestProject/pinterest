@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'Users',
     'Boards',
     'Pins',
@@ -84,7 +85,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'pinterest',
         'USER': 'postgres',
-        'PASSWORD':'691999',
+        'PASSWORD':'goegoegoe123',
         'HOST':'localhost',
         'PORT': '5432'
 
