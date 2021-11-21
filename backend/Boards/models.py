@@ -12,13 +12,12 @@ class Board(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     notes = models.TextField(blank=True, null=True)
-    ideas = models.CharField(blank=True, null=True)
-    cover = models.ImageField(upload_to="/uploads/boards/cover/")
+    cover = models.ImageField(upload_to="uploads/boards/cover/")
     created_by = models.OneToOneField(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     is_public = models.BooleanField(default=True)
     is_archived = models.BooleanField(default=False)
-    pins = models.ManyToManyField(Pin)
+    # pins = models.ManyToManyField(Pin)
 
     def __str__(self) -> str:
         return f"{self.name}"
