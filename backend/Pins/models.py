@@ -4,14 +4,6 @@ from datetime import datetime
 # Create your models here.
 
 
-class Pin(models.Model):
-
-    title = models.CharField(max_length=10)
-
-    def __str__(self):
-        return self.title
-
-
 class Favourite(models.Model):
 
     date = models.DateTimeField(default=datetime.now, blank=True)
