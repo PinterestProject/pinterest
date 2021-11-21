@@ -1,42 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, UserManager
 from django.contrib.auth import get_user_model
-# from Boards.models import Board
+from Boards.models import Board
 
-class UserManager(BaseUserManager):
-    """
-    this class created to handle user model operation like create user or super user
-    which inherit form BaseUserManager like user class inherit from AbstractBaseUser to
-    implement the some required function
-    """
-    def create_user(self,name,email,password=None):
-        """
-        create new user with no super rights.
-        normalize_email : used to make all mails in one lower case format
-        set_password : to store password as hashed not plain text
-        """
-        if not email:
-            raise ValueError('user must have email address')
-        email=self.normalize_email(email)
-        user=self.model(email=email,name=name)
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
-
-    def create_superuser(self,name,email,password=None):
-        """
-        from this function you'll able to create user with super rights
-        :param name: str
-        :param email: str
-        :param password: str
-        :return: user object
-
-        """
-        user=self.create_user(name,email,password)
-        user.is_superuser=True
-        user.is_staff=True
-        user.save(using=self._db)
-        return user
 
 class User(AbstractBaseUser, PermissionsMixin):
 
@@ -81,6 +47,18 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.email
 
 
+class Relationship(models.Model):
+    follower_id = models.ForeignKey("User",on_delete=models.CASCADE,related_name='rel_from_set')
+    followed_id = models.ForeignKey("User",on_delete=models.CASCADE, related_name='rel_to_set')
+    created = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:
+        ordering = ('-created',)
+
+    def __str__(self):
+        return '{} follows {}'.format(self.follower_id,self.followed_id)
+
+        
 class Invitation(models.Model):
 
     collaborator = models.CharField(max_length=250,null=True)

@@ -37,13 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
     'Users',
     'Boards',
     'Pins',
     'Categories',
     'Chat',
-    'Comments'
+    'Comments',
+    'rest_framework',
+    'rest_framework.authtoken'
 ]
 
 MIDDLEWARE = [
@@ -85,7 +86,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'pinterest',
         'USER': 'postgres',
-        'PASSWORD':'******',
+        'PASSWORD':'*****',
         'HOST':'localhost',
         'PORT': '5432'
 
@@ -141,3 +142,9 @@ AUTH_USER_MODEL='Users.User'
 
 MEDIA_URL='/media/'
 MEDIA_ROOT=os.path.join(BASE_DIR,'media')
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ]
+}
