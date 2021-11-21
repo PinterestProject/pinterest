@@ -9,14 +9,17 @@ from django.contrib.auth import get_user_model
 from Boards.models import Board
 
 
-class User(AbstractBaseUser, PermissionsMixin):
 
-    name = models.CharField(max_length=30)
+class User(AbstractBaseUser,PermissionsMixin):
+
+    username = models.CharField(max_length=30)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
     password = models.CharField(max_length=255)
+    password_conf = models.CharField(max_length=255,default="")
     email = models.EmailField(max_length=225,unique=True)
     birth_day = models.DateField(null=True)
+
     gender = models.TextField(choices=[
         ('male', 'Male'),
         ('female','Female')
@@ -41,14 +44,15 @@ class User(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=True)
-
+    categories = models.ManyToManyField(Category)
+    following = models.ManyToManyField('self', through='Relationship', related_name='followers', symmetrical=False)
 
     USERNAME_FIELD='email'
-    REQUIRED_FIELDS = ['name']
+    REQUIRED_FIELDS = ['username']
 
     objects=UserManager()
-    def __str__(self):
 
+    def __str__(self):
         return self.email
 
 
@@ -63,7 +67,7 @@ class Relationship(models.Model):
     def __str__(self):
         return '{} follows {}'.format(self.follower_id,self.followed_id)
 
-
+      
 class Invitation(models.Model):
 
     collaborator = models.CharField(max_length=250,null=True)
@@ -78,4 +82,5 @@ class User_board(models.Model):
 
     user_id = models.ForeignKey('User', on_delete=models.CASCADE)
     board_id = models.ForeignKey('Board', on_delete=models.CASCADE )
+
 

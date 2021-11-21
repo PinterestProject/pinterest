@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 from pathlib import Path
+from dotenv import dotenv_values
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,7 +22,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-!9dy@jmp_9q3a9y&zb2j(tt9hyqbq+o*f@bi9*km)cn1n+&u&!'
+secrets = dotenv_values(f'{BASE_DIR}/.env')
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': secrets['NAME'],
+        'USER': secrets['USER'],
+        'PASSWORD': secrets['PASSWORD'],
+        'HOST': secrets['HOST'],
+        'PORT': secrets['PORT'],
+    }
+}
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -81,17 +93,6 @@ WSGI_APPLICATION = 'Pinterest.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'pinterest',
-        'USER': 'postgres',
-        'PASSWORD':'*****',
-        'HOST':'localhost',
-        'PORT': '5432'
-
-    }
-}
 
 
 # Password validation
