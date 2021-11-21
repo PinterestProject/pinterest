@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, UserManager
 from django.contrib.auth import get_user_model
+from Categories.models import Categories
 
 
 class UserManager(BaseUserManager):
@@ -11,7 +12,7 @@ class UserManager(BaseUserManager):
     """
     def create_user(self,name,email,password=None):
         """
-        create new user with no super rights.
+        create new user with no super rights
         normalize_email : used to make all mails in one lower case format
         set_password : to store password as hashed not plain text
         """
@@ -70,7 +71,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=True)
-
+    #categories = models.ManyToManyField("Categories")
+    following = models.ManyToManyField('self', through='Relationship', related_name='followers', symmetrical=False)
 
     USERNAME_FIELD='email'
     REQUIRED_FIELDS = ['name']
@@ -79,3 +81,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
 
         return self.email
+
+class Relationship(models.Model):
+    follower_id = models.ForeignKey("User",on_delete=models.CASCADE,related_name='rel_from_set')
+    followed_id = models.ForeignKey("User",on_delete=models.CASCADE, related_name='rel_to_set')
+    created = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:
+        ordering = ('-created',)
+
+    def __str__(self):
+        return '{} follows {}'.format(self.follower_id,self.followed_id)
