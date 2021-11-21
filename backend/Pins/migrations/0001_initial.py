@@ -43,6 +43,6 @@ class Migration(migrations.Migration):
                 ('attachment', models.ImageField(upload_to='uploads/pins/')),
                 ('users', models.ManyToManyField(to=settings.AUTH_USER_MODEL)),
             ],
-        ),
 
-    ]
+
+
