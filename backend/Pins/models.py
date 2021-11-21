@@ -4,6 +4,7 @@ from datetime import datetime
 from Categories.models import Category
 # Create your models here.
 
+
 class Pin(models.Model):
     """
     Pins Table
@@ -30,3 +31,4 @@ class Favourite(models.Model):
 
     def __str__(self):
         return f'{self.user_id.name} {self.pin_id.title}'
+

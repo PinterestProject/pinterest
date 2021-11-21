@@ -5,3 +5,4 @@ from .models import *
 admin.site.register(Favourite)
 admin.site.register(Pin)
 
+
