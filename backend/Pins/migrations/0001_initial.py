@@ -34,4 +34,10 @@ class Migration(migrations.Migration):
                 'unique_together': {('user_id', 'pin_id')},
             },
         ),
+                ('title', models.CharField(max_length=255)),
+                ('description', models.TextField(blank=True, null=True)),
+                ('attachment', models.ImageField(upload_to='uploads/pins/')),
+                ('users', models.ManyToManyField(to=settings.AUTH_USER_MODEL)),
+            ],
+        ),
     ]
