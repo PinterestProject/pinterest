@@ -1,17 +1,24 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, UserManager
-from django.contrib.auth import get_user_model
+
 from Categories.models import Category
+from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import BaseUserManager
+from django.contrib.auth.models import PermissionsMixin
+from django.contrib.auth.models import UserManager
+from django.contrib.auth import get_user_model
 
 
-class User(AbstractBaseUser, PermissionsMixin):
+class User(AbstractBaseUser,PermissionsMixin):
 
-    name = models.CharField(max_length=30)
+
+    username = models.CharField(max_length=30)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
     password = models.CharField(max_length=255)
+    password_conf = models.CharField(max_length=255,default="")
     email = models.EmailField(max_length=225,unique=True)
     birth_day = models.DateField(null=True)
+
     gender = models.TextField(choices=[
         ('male', 'Male'),
         ('female','Female')
@@ -40,11 +47,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     following = models.ManyToManyField('self', through='Relationship', related_name='followers', symmetrical=False)
 
     USERNAME_FIELD='email'
-    REQUIRED_FIELDS = ['name']
+    REQUIRED_FIELDS = ['username']
 
     objects=UserManager()
-    def __str__(self):
 
+    def __str__(self):
         return self.email
 
 class Relationship(models.Model):
