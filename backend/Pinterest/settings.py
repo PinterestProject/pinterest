@@ -98,7 +98,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'pinterest',
         'USER': 'postgres',
-        'PASSWORD':'691999',
+        'PASSWORD':'nesren',
         'HOST':'localhost',
         'PORT': '5432'
 
