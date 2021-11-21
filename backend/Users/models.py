@@ -57,8 +57,8 @@ class User(AbstractBaseUser,PermissionsMixin):
 
 
 class Relationship(models.Model):
-    follower_id = models.ForeignKey("User",on_delete=models.CASCADE,related_name='rel_from_set')
-    followed_id = models.ForeignKey("User",on_delete=models.CASCADE, related_name='rel_to_set')
+    follower_id = models.ForeignKey("Users.User",on_delete=models.CASCADE,related_name='rel_from_set')
+    followed_id = models.ForeignKey("Users.User",on_delete=models.CASCADE, related_name='rel_to_set')
     created = models.DateTimeField(auto_now_add=True, db_index=True)
 
     class Meta:
@@ -67,7 +67,7 @@ class Relationship(models.Model):
     def __str__(self):
         return '{} follows {}'.format(self.follower_id,self.followed_id)
 
-      
+
 class Invitation(models.Model):
 
     collaborator = models.CharField(max_length=250,null=True)
@@ -79,8 +79,8 @@ class Invitation(models.Model):
 
 
 class User_board(models.Model):
-
-    user_id = models.ForeignKey('User', on_delete=models.CASCADE)
-    board_id = models.ForeignKey('Board', on_delete=models.CASCADE )
+    # from Boards.models import Board
+    user_id = models.ForeignKey('Users.User', on_delete=models.CASCADE)
+    board_id = models.ForeignKey(to=Board, on_delete=models.CASCADE )
 
 
