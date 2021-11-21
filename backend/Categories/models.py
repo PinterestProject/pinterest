@@ -4,11 +4,11 @@ from django.conf import settings
 
 # Create your models here.
 
-class Categories(models.Model):
+class Category(models.Model):
 
     name = models.CharField(max_length=150)
     description = models.TextField()
-    #pins = models.ManyToManyField("")
+
 
 
     def __str__(self):

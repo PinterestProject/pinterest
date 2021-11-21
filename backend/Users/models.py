@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, UserManager
 from django.contrib.auth import get_user_model
-from Categories.models import Categories
+from Categories.models import Category
 
 
 class UserManager(BaseUserManager):
@@ -71,7 +71,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=True)
-    #categories = models.ManyToManyField("Categories")
+    categories = models.ManyToManyField(Category)
     following = models.ManyToManyField('self', through='Relationship', related_name='followers', symmetrical=False)
 
     USERNAME_FIELD='email'
