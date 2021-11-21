@@ -1,5 +1,10 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, UserManager
+
+from Categories.models import Category
+from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import BaseUserManager
+from django.contrib.auth.models import PermissionsMixin
+from django.contrib.auth.models import UserManager
 from django.contrib.auth import get_user_model
 from Boards.models import Board
 
@@ -58,7 +63,7 @@ class Relationship(models.Model):
     def __str__(self):
         return '{} follows {}'.format(self.follower_id,self.followed_id)
 
-        
+
 class Invitation(models.Model):
 
     collaborator = models.CharField(max_length=250,null=True)
