@@ -2,23 +2,11 @@ from django.shortcuts import render
 
 # Create your views here.
 
-
-from django.http import Http404
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.http import HttpResponse
-from rest_framework import permissions
-from rest_framework.permissions import IsAuthenticated
-from .models import *
 from .serializer import *
-from rest_framework import mixins
-from rest_framework.decorators import api_view
-from django.dispatch import receiver
-from django.db.models.signals import post_save
+
 
 
 class comment_api(APIView):
