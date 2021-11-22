@@ -1,15 +1,10 @@
 from django.db import models
-<<<<<<< HEAD
 from Users.models import User
 from Boards.models import Board
-=======
-# from Users.models import User
->>>>>>> origin/dev
 from datetime import datetime
 from Categories.models import Category
 from Boards.models import Board
 # Create your models here.
-
 
 class Pin(models.Model):
     """
@@ -36,5 +31,5 @@ class Favourite(models.Model):
         unique_together = ('user_id', 'pin_id',)
 
     def __str__(self):
-        return f'{self.user_id.name} {self.pin_id.title}'
+        return f'{self.user_id.username} {self.pin_id.title}'
 
