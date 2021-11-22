@@ -44,7 +44,7 @@ class comment_api(APIView):
             response['data'] = {'message': 'Successfully Deleted the comment'}
             response['status'] = status.HTTP_200_OK
         except Exception as e:
-            response['data'] = {'message': 'Error While Deleting Movie -- {} -- Target Movie {}'.format(str(e), pk)}
+            response['data'] = {'message': 'Error While Deleting comment -- {} -- Target Comment{}'.format(str(e), pk)}
             response['status'] = status.HTTP_400_BAD_REQUEST
 
         print("Result -> ", response)
@@ -56,8 +56,6 @@ class comment_api(APIView):
         except Exception as e:
             return Response(data={'message': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-        # if request.method == 'PUT':
-        #     serialized_movie = MovieSerializer(instance=movie, data=request.data)
 
         serialize= CommentSerializer(instance=comment, data=request.data, partial=True)
 
@@ -71,6 +69,134 @@ class comment_api(APIView):
 class comment_list(APIView):
 
     def get(self, request, *args,**kwargs):
-        movies = comments.objects.all()
-        serializer = CommentSerializer(instance=movies, many=True)
+        comment = comments.objects.all()
+        serializer = CommentSerializer(instance=comment, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+
+class like_api(APIView):
+
+    def get(self,request,pk, *args,**kwargs):
+        response = {}
+        like = like_api.objects.filter(pk=pk)
+        if like.exists():
+            like = like.first()
+            serializer = LikeSerializer(instance=like)
+
+            response['data'] = serializer.data
+            response['status'] = status.HTTP_200_OK
+        else:
+            response['data'] = {'message': 'failed Comment like does not exist'}
+            response['status'] = status.HTTP_400_BAD_REQUEST
+
+        return Response(**response)
+
+
+    # def get(self,request,pk, *args,**kwargs):
+    #     response = {}
+    #
+    #     comment = comments.objects.get(pk=pk)
+    #     likes = comments_likes.objects.filter(comment_id=comment.id)
+    #     serializer = LikeSerializer(instance=likes)
+    #         # if likes.exists():
+    #         #     serializer = LikeSerializer(instance=likes)
+    #         # else:
+    #         #     response['data'] = {'message': 'failed no likes for the comment '}
+    #         #     response['status'] = status.HTTP_400_BAD_REQUEST
+    #
+    #     #     response['data'] = serializer.data
+    #     #     response['status'] = status.HTTP_200_OK
+    #     # else:
+    #     #     response['data'] = {'message': 'failed Comment does not exist'}
+    #     #     response['status'] = status.HTTP_400_BAD_REQUEST
+    #
+    #     return Response(serializer.data)
+
+    def post(self,request, *args,**kwargs):
+        serializers = LikeSerializer(data=request.data,many=True)
+        if serializers.is_valid():
+            serializers.save()
+            return Response({'message': serializers.data})
+        return Response({'message': serializers.errors})
+
+    def delete (self,request,pk,*args,**kwargs):
+        response = {}
+        try:
+            like = comments_likes.objects.get(pk=pk)
+            like.delete()
+            response['data'] = {'message': 'Successfully Deleted the comment'}
+            response['status'] = status.HTTP_200_OK
+        except Exception as e:
+            response['data'] = {'message': 'Error While Deleting like -- {} -- Target Comment_like {}'.format(str(e), pk)}
+            response['status'] = status.HTTP_400_BAD_REQUEST
+
+        print("Result -> ", response)
+        return Response(**response)
+
+
+class reply_api(APIView):
+
+
+    def get(self,request,pk, *args,**kwargs):
+        response = {}
+        reply = comment_reply.objects.filter(pk=pk)
+        if reply.exists():
+            reply = reply.first()
+            serializer = CommentSerializer(instance=reply)
+
+            response['data'] = serializer.data
+            response['status'] = status.HTTP_200_OK
+        else:
+            response['data'] = {'message': 'failed Comment Reply does not exist'}
+            response['status'] = status.HTTP_400_BAD_REQUEST
+
+        return Response(**response)
+
+
+    def post(self,request, *args,**kwargs):
+        serializer = ReplySerializer(data=request.data,many=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': serializer.data})
+        return Response({'message': serializer.errors})
+
+    def delete (self,request,pk,*args,**kwargs):
+        response = {}
+        try:
+            reply = comment_reply.objects.get(pk=pk)
+            reply.delete()
+            response['data'] = {'message': 'Successfully Deleted the comment reply'}
+            response['status'] = status.HTTP_200_OK
+        except Exception as e:
+            response['data'] = {'message': 'Error While Deleting reply -- {} -- Target reply {}'.format(str(e), pk)}
+            response['status'] = status.HTTP_400_BAD_REQUEST
+
+        print("Result -> ", response)
+        return Response(**response)
+
+    def patch(self, request, pk, *args, **kwargs):
+        try:
+            reply = comment_reply.objects.get(pk=pk)
+        except Exception as e:
+            return Response(data={'message': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+        serialize= ReplySerializer(instance=reply, data=request.data, partial=True)
+
+        if serialize.is_valid():
+            serialize.save()
+            return Response(data=serialize.data, status=status.HTTP_200_OK)
+
+        return Response(data=serialize.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# class replies_for_comment(APIView):
+#
+#     def get(self, request, pk ,*args,**kwargs):
+#         try:
+#             reply = comment_reply.objects.get(pk=pk)
+#         except Exception as e:
+#             return Response(data={'message': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+#         movies = comments.objects.all()
+#         serializer = CommentSerializer(instance=movies, many=True)
+#         return Response(data=serializer.data, status=status.HTTP_200_OK)
