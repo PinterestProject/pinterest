@@ -6,7 +6,7 @@ from rest_framework.viewsets import ModelViewSet
 #
 from django.contrib.auth import get_user_model
 #
-from .models import User
+from .models import User, Relationship
 #
 User = get_user_model()
 
@@ -41,3 +41,9 @@ class UserSerializer(serializers.ModelSerializer):
             user.set_password(self.validated_data.get('password'))
             user.save()
             return user
+
+class relationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Relationship
+        fields = '__all__'

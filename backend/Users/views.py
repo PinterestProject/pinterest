@@ -9,9 +9,9 @@ from rest_framework.authtoken.models import Token
 from rest_framework import status
 from rest_framework import serializers
 #
-from .serializers import UserSerializer
+from .serializers import UserSerializer,relationSerializer
 #
-from .models import User
+from .models import User,Relationship
 # Create your views here.
 # User=get_user_model()
 class UserViewSet(ModelViewSet):
@@ -82,3 +82,52 @@ class UserChangePasswordHandler():
             request.user.save()
             return Response({"message":"password updated!"})
         return Response({"message ":request.user.check_password(request.data['old_pass'])})
+
+
+
+## relationship views ##
+
+@api_view(['GET'])
+def relationList(request):
+    rel = Relationship.objects.all()
+    serialized_rel = relationSerializer(instance=rel, many=True)
+    return Response(data=serialized_rel.data, status=status.HTTP_200_OK)
+
+@api_view(['DELETE'])
+def relationDelete(request, pk):
+    response = {}
+    try:
+        rel_obj = Relationship.objects.get(pk=pk)
+        rel_obj.delete()
+        response['data'] = {'message': 'successfully Deleted'}
+        response['status'] = status.HTTP_200_OK
+    except Exception as e:
+        response['data'] = {'message': 'ERROR:While Deleting movie'}
+        response['status'] = status.HTTP_400_BAD_REQUEST
+
+    return Response(**response)
+
+@api_view(['GET'])
+def followedsList(request,pk):
+    res={}
+    rel_list= Relationship.objects.all()
+    serialized_rel = relationSerializer(instance=rel_list, many=True)
+    flist = serialized_rel.data
+    filter_result = filter(lambda d: d.get('follower_id') == pk, flist)
+    finalList=list(filter_result)
+    res['followed']= finalList
+    res['count'] = {len(finalList)}
+    return Response(res)
+
+
+@api_view(['GET'])
+def followersList(request,pk):
+    res={}
+    rel_list = Relationship.objects.all()
+    serialized_rel = relationSerializer(instance=rel_list, many=True)
+    flist = serialized_rel.data
+    filter_result = filter(lambda d: d.get('followed_id') == pk, flist)
+    finalList = list(filter_result)
+    res['followed'] = finalList
+    res['count'] = {len(finalList)}
+    return Response(res)
