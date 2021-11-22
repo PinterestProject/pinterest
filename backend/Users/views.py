@@ -115,7 +115,7 @@ def followedsList(request,pk):
     flist = serialized_rel.data
     filter_result = filter(lambda d: d.get('follower_id') == pk, flist)
     finalList=list(filter_result)
-    res['followed']= finalList
+    res['followeds']= finalList
     res['count'] = {len(finalList)}
     return Response(res)
 
@@ -128,6 +128,6 @@ def followersList(request,pk):
     flist = serialized_rel.data
     filter_result = filter(lambda d: d.get('followed_id') == pk, flist)
     finalList = list(filter_result)
-    res['followed'] = finalList
+    res['followers'] = finalList
     res['count'] = {len(finalList)}
     return Response(res)
