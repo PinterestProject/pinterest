@@ -39,8 +39,8 @@ class comment_api(APIView):
     def delete (self,request,pk,*args,**kwargs):
         response = {}
         try:
-            comment = comments.objects.get(pk=pk)
-            comment.delete()
+            like = comments_likes.objects.get(pk=pk)
+            like.delete()
             response['data'] = {'message': 'Successfully Deleted the comment'}
             response['status'] = status.HTTP_200_OK
         except Exception as e:
@@ -79,7 +79,7 @@ class like_api(APIView):
 
     def get(self,request,pk, *args,**kwargs):
         response = {}
-        like = like_api.objects.filter(pk=pk)
+        like = comments_likes.objects.filter(pk=pk)
         if like.exists():
             like = like.first()
             serializer = LikeSerializer(instance=like)
@@ -93,25 +93,6 @@ class like_api(APIView):
         return Response(**response)
 
 
-    # def get(self,request,pk, *args,**kwargs):
-    #     response = {}
-    #
-    #     comment = comments.objects.get(pk=pk)
-    #     likes = comments_likes.objects.filter(comment_id=comment.id)
-    #     serializer = LikeSerializer(instance=likes)
-    #         # if likes.exists():
-    #         #     serializer = LikeSerializer(instance=likes)
-    #         # else:
-    #         #     response['data'] = {'message': 'failed no likes for the comment '}
-    #         #     response['status'] = status.HTTP_400_BAD_REQUEST
-    #
-    #     #     response['data'] = serializer.data
-    #     #     response['status'] = status.HTTP_200_OK
-    #     # else:
-    #     #     response['data'] = {'message': 'failed Comment does not exist'}
-    #     #     response['status'] = status.HTTP_400_BAD_REQUEST
-    #
-    #     return Response(serializer.data)
 
     def post(self,request, *args,**kwargs):
         serializers = LikeSerializer(data=request.data,many=True)
@@ -133,6 +114,21 @@ class like_api(APIView):
 
         print("Result -> ", response)
         return Response(**response)
+
+class likes_for_comment(APIView):
+
+    def get(self, request, pk,*args,**kwargs):
+        try:
+            comment = comments.objects.get(pk=pk)
+        except Exception as e:
+            return Response(data={'message': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            like = comments_likes.objects.filter(comment_id=comment.id)
+            serializer = LikeSerializer(instance=like,many=True)
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(data={'message': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class reply_api(APIView):
@@ -190,13 +186,16 @@ class reply_api(APIView):
         return Response(data=serialize.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# class replies_for_comment(APIView):
-#
-#     def get(self, request, pk ,*args,**kwargs):
-#         try:
-#             reply = comment_reply.objects.get(pk=pk)
-#         except Exception as e:
-#             return Response(data={'message': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-#         movies = comments.objects.all()
-#         serializer = CommentSerializer(instance=movies, many=True)
-#         return Response(data=serializer.data, status=status.HTTP_200_OK)
+class replies_for_comment(APIView):
+
+    def get(self, request, pk,*args,**kwargs):
+        try:
+            comment = comments.objects.get(pk=pk)
+        except Exception as e:
+            return Response(data={'message': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            reply = reply_api.objects.filter(comment_id=comment.id)
+            serializer = ReplySerializer(instance=reply,many=True)
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(data={'message': str(e)}, status=status.HTTP_400_BAD_REQUEST)

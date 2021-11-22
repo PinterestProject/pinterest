@@ -11,8 +11,10 @@ urlpatterns = [
     path('comment/',comment_api.as_view()), #create comment
     path('comment/<int:pk>',comment_api.as_view()), #delete,patch,get comment
     path('like',like_api.as_view()), #create Like
-    path('like/<int:pk>',like_api.as_view()), #delete,get all comments by enter the pk of a comment
+    path('like/<int:pk>',like_api.as_view()), #delete,get
+    path('likes/<int:pk>',likes_for_comment.as_view()), #gel all likes for a comment bt enter the pk of a comment
     path('reply',reply_api.as_view()), #create Like
-    path('reply/<int:pk>',reply_api.as_view()), #delete,get all comments by enter the pk of a comment
+    path('reply/<int:pk>',reply_api.as_view()), #delete,get
+    path('replies/<int:pk>',replies_for_comment.as_view()) #get all comments by enter the pk of a comment
 
     ]
