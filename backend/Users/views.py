@@ -131,3 +131,5 @@ def followersList(request,pk):
     res['followed'] = finalList
     res['count'] = {len(finalList)}
     return Response(res)
+
+

@@ -31,3 +31,4 @@ class Favourite(models.Model):
     def __str__(self):
         return f'{self.user_id.name} {self.pin_id.title}'
 
+
