@@ -12,3 +12,4 @@ class Chat(models.Model):
 
     def __str__(self):
         return f'{self.sender_id.username } {self.receiver_id.username }'
+

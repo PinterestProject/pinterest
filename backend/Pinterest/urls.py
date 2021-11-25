@@ -15,16 +15,26 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+<<<<<<< HEAD
+=======
+
+
+#todo:front#3
+>>>>>>> origin/dev
 from django.views.generic import TemplateView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', include('Users.urls')),
+<<<<<<< HEAD
 <<<<<<< HEAD
     path('categories/', include('Categories.urls')),
 
 
 =======
 
+=======
+    path('comments/', include('Comments.urls')),
+>>>>>>> origin/dev
     path('categories/', include('Categories.urls')),
     path('pins/', include('Pins.api.v1.urls')),
     path('boards/', include('Boards.api.v1.urls')),
@@ -32,6 +42,7 @@ urlpatterns = [
     path('pin/', include('Pins.urls')),
 >>>>>>> 90fbf9f85c6fbc310f287a694229ace167505044
     path('', TemplateView.as_view(template_name='index.html'))
+
 
 
 ]
