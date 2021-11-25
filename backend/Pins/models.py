@@ -2,8 +2,6 @@ from django.db import models
 from Users.models import User
 
 from datetime import datetime
-from Categories.models import Category
-from Boards.models import Board
 
 # Create your models here.
 

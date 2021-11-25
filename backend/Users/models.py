@@ -1,12 +1,13 @@
 from django.db import models
 
+
 from Categories.models import Category
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import UserManager
 from django.contrib.auth import get_user_model
-from Boards.models import Board
+
 
 
 
@@ -72,19 +73,21 @@ class Relationship(models.Model):
         return '{} follows {}'.format(self.follower_id,self.followed_id)
 
 
+
 class Invitation(models.Model):
 
-    collaborator = models.CharField(max_length=250,null=True)
-    can_edit = models.BooleanField(default=True)
-    user_board_id = models.ForeignKey('User_board', on_delete=models.CASCADE)
 
-    def __str__(self):
+   collaborator = models.CharField(max_length=250,null=True)
+   can_edit = models.BooleanField(default=True)
+   user_board_id = models.ForeignKey('User_board', on_delete=models.CASCADE)
+
+   def __str__(self):
         return self.collaborator
-
 
 class User_board(models.Model):
     # from Boards.models import Board
     user_id = models.ForeignKey('Users.User', on_delete=models.CASCADE)
-    board_id = models.ForeignKey(to=Board, on_delete=models.CASCADE )
+    board_id = models.ForeignKey('Boards.Board', on_delete=models.CASCADE )
+
 
 

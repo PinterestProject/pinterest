@@ -6,6 +6,7 @@ from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken.views import obtain_auth_token
 #
 from . import views
+from .views import relationList, relationDelete,followedsList, followersList
 
 router=DefaultRouter()
 
@@ -17,5 +18,10 @@ urlpatterns=[
     path('signup/',views.UserRegisterHandler.signup),
     path('logout/',views.UserRegisterHandler.logout),
     path('login/',obtain_auth_token),
-    path('changepassword/<str:old_password>',views.UserChangePasswordHandler.change_password)
+    path('changepassword/<str:old_password>',views.UserChangePasswordHandler.change_password),
+    path('relation/list',relationList),
+    path('relation/delete', relationDelete),
+    path('relation/followed/<int:pk>',followedsList),
+    path('relation/follower/<int:pk>',followersList),
+
 ]
