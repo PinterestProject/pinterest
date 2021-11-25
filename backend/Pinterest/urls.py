@@ -15,11 +15,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-
+#todo:front#3
+from django.views.generic import TemplateView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', include('Users.urls')),
+
     path('categories/', include('Categories.urls')),
+    path('pins/', include('Pins.api.v1.urls')),
+    path('boards/', include('Boards.api.v1.urls')),
+    path('chat/', include('Chat.urls')),
+    path('pin/', include('Pins.urls')),
+    path('', TemplateView.as_view(template_name='index.html'))
 
 
 ]
