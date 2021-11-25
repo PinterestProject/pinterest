@@ -175,7 +175,7 @@ class InvitationList(APIView):
 #         if request.user.is_authenticated:
 #             return True
 #         return False
-=======
+
 
 ## relationship views ##
 
