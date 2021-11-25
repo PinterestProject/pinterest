@@ -23,7 +23,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-!9dy@jmp_9q3a9y&zb2j(tt9hyqbq+o*f@bi9*km)cn1n+&u&!'
 secrets = dotenv_values(f'{BASE_DIR}/.env')
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -74,7 +73,10 @@ ROOT_URLCONF = 'Pinterest.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            #todo:front#1
+            f'{secrets["BASE_DIR"]}{secrets["FRONT_NAME"]}{secrets["BUILD"]}'
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -132,7 +134,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-
+#todo:front#2
+STATICFILES_DIRS=[f'{secrets["BASE_DIR"]}{secrets["FRONT_NAME"]}{secrets["STATIC"]}']
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -143,8 +146,6 @@ AUTH_USER_MODEL='Users.User'
 
 MEDIA_URL='/media/'
 MEDIA_ROOT=os.path.join(BASE_DIR,'media')
-
-
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [

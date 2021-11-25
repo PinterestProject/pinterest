@@ -7,7 +7,8 @@ class comments(models.Model):
     id = models.AutoField(primary_key=True)
     user_id =models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     pin_id = models.ForeignKey(Pin, null=True, on_delete=models.SET_NULL)
-    reply_content = models.TextField()
+    reply_content = models.TextField(default="")
+
 
     class Meta:
         verbose_name_plural = "Comments"

@@ -8,11 +8,20 @@ from django.contrib.auth import get_user_model
 #
 from .models import User, Invitation
 #
+
+from .models import User
+from .models import Relationship
+
+#
 User = get_user_model()
 
+class RelationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Relationship
+        fields="__all__"
 
 class UserSerializer(serializers.ModelSerializer):
-    # password_conf = serializers.CharField(write_only=True)
+
 
     class Meta:
         model = User
@@ -23,7 +32,8 @@ class UserSerializer(serializers.ModelSerializer):
             'is_staff',
             'groups',
             'user_permissions',
-            'history'
+            'history',
+            'following'
             )
         extra_kwargs = {
             'password': {'write_only': True},
@@ -32,9 +42,11 @@ class UserSerializer(serializers.ModelSerializer):
         }
 
     def save(self, **kwargs):
-        # print(kwargs)
-        user = User(email=self.validated_data.get('email'),
+        user = User.objects.create(email=self.validated_data.get('email'),
+                    first_name=self.validated_data.get("first_name"),
+                    last_name=self.validated_data.get("last_name"),
                     username=self.validated_data.get('username'))
+
         if self.validated_data.get('password') != self.validated_data.get('password_conf'):
             raise serializers.ValidationError({'message': 'confirm password not match'})
         else:
@@ -43,7 +55,16 @@ class UserSerializer(serializers.ModelSerializer):
             return user
 
 
+
 class InvitationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Invitation
         fields = "__all__"
+
+class relationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Relationship
+        fields = '__all__'
+
+
