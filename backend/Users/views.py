@@ -11,7 +11,9 @@ from rest_framework import status
 from rest_framework import serializers
 #
 from .serializers import UserSerializer
+# from .serializers import RelationSerializer
 from .models import User
+from .models import Relationship
 from .permissions import UserPermissions
 
 
@@ -40,12 +42,8 @@ class UserViewSet(ModelViewSet):
         return Response({'message':user.errors})
 
     def partial_update(self, request, *args, **kwargs):
-        # print(request.user.email)
         user = User.objects.get(pk=kwargs['pk'])
         self.check_object_permissions(request,user)
-        # return Response({"hhh":'hhhh'})
-
-        # print(user.email)
         user_serialized = UserSerializer(instance=user,data=request.data,partial=True)
 
         if user_serialized.is_valid():
@@ -92,3 +90,21 @@ class UserChangePasswordHandler():
             request.user.save()
             return Response({"message":"password updated!"})
         return Response({"message ":request.user.check_password(request.data['old_pass'])})
+
+# class RelationshipViewSet(ModelViewSet):
+#     serializer_class = RelationSerializer
+#     queryset = Relationship.objects.all()
+
+# class UserFollowing():
+#     @api_view(['GET'])
+#     def who_user_follow(self):
+#         user=self.user
+#         stars=user.following.all()
+#         # fans=user.following.all()
+#         return Response({'accounts':UserSerializer(instance=starts,many=True).data})
+#     @api_view(['GET'])
+#     def who_follow_user(self):
+#         user=self.user
+#         # fans=user.followers.all()
+#         fans=user.followers.all()
+#         return Response({'accounts':UserSerializer(instance=fans,many=True).data})
