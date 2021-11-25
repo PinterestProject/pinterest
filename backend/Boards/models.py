@@ -13,7 +13,7 @@ class Board(models.Model):
     description = models.TextField(blank=True, null=True)
     notes = models.TextField(blank=True, null=True)
     cover = models.ImageField(upload_to="uploads/boards/cover/")
-    created_by = models.OneToOneField("Users.User", on_delete=models.CASCADE)
+    created_by = models.ForeignKey("Users.User", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     is_public = models.BooleanField(default=True)
     is_archived = models.BooleanField(default=False)
