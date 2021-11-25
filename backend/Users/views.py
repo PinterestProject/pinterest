@@ -5,15 +5,20 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.authtoken.models import Token
+from rest_framework.authentication import TokenAuthentication
 #
 from rest_framework import status
 from rest_framework import serializers
 #
 from .serializers import UserSerializer
-#
+# from .serializers import RelationSerializer
 from .models import User
+from .models import Relationship
+from .permissions import UserPermissions
+
+
 # Create your views here.
-# User=get_user_model()
+User=get_user_model()
 class UserViewSet(ModelViewSet):
     """
     usage of this class with be in the following cases
@@ -26,37 +31,44 @@ class UserViewSet(ModelViewSet):
     """
     serializer_class = UserSerializer
     queryset = User.objects.all()
+    permission_classes = [UserPermissions]
+    # authentication_classes = [TokenAuthentication]
+
     def create(self, request, *args, **kwargs):
         user = UserSerializer(data=request.data)
         if user.is_valid():
             user.save()
             return Response({'message':user.data})
         return Response({'message':user.errors})
-    # def create(self, request, *args, **kwargs):
-    #
-    #     if request.data['password']!= request.data['password_conf']:
-    #         raise serializers.ValidationError({'password':'confirmed password did not match'})
-    #     else :
-    #         user = User(email=request.data['email'],username=request.data['username'])
-    #         user_serialized=UserSerializer(instance=user,data=request.data)
-    #         user.set_password(request.data['password'])
-    #         if user_serialized.is_valid():
-    #             # print(user.instance)
-    #             user.save()
-    #             return Response({'message':user_serialized.data})
-    #         else:
-    #             return Response({'message':user_serialized.errors})
-            # return Response({"message":status.HTTP_406_NOT_ACCEPTABLE})
+
+    def partial_update(self, request, *args, **kwargs):
+        user = User.objects.get(pk=kwargs['pk'])
+        self.check_object_permissions(request,user)
+        user_serialized = UserSerializer(instance=user,data=request.data,partial=True)
+
+        if user_serialized.is_valid():
+            user_serialized.update(instance=user,validated_data=request.data)
+            return Response({"message":user_serialized.data})
+        return Response({'message':user_serialized.errors})
+
+    def update(self, request, *args, **kwargs):
+        """
+        handle full user update
+        """
+        user = User.objects.get(pk=kwargs['pk'])
+        self.check_object_permissions(request=request,obj=user)
+        user_serialized = UserSerializer(instance=user,data=request.data)
+        if user_serialized.is_valid():
+            user_serialized.update(instance=user,validated_data=request.data)
+            return Response({"message":user_serialized.data})
+        return Response({'message':user_serialized.errors})
+
 
 class UserRegisterHandler():
     @api_view(['POST'])
     def signup(request):
-        # if request.data['password'] != request.data['password_conf']:
-        #     raise serializers.ValidationError({'password': 'confirmed password did not match'})
-        # else:
         user = UserSerializer(data=request.data)
         if user.is_valid():
-            # print(user.instance)
             user.save()
             created_user=User.objects.get(email=user.data['email'])
             token=Token.objects.create(user=created_user)
@@ -73,12 +85,26 @@ class UserRegisterHandler():
 class UserChangePasswordHandler():
     @api_view(['POST'])
     def change_password(request,old_password):
-        # print("user id =>",request.user.id)
-        # print("1st check equality =>",User.objects.get(pk=request.user.id).check_password(old_password))
-        # print("old sent password =>",old_password)
-        # print("1st check equality =>",request.user.check_password(request.data['old_pass']))
         if request.user.check_password(request.data['old_pass']) :
             request.user.set_password(request.data['new_password'])
             request.user.save()
             return Response({"message":"password updated!"})
         return Response({"message ":request.user.check_password(request.data['old_pass'])})
+
+# class RelationshipViewSet(ModelViewSet):
+#     serializer_class = RelationSerializer
+#     queryset = Relationship.objects.all()
+
+# class UserFollowing():
+#     @api_view(['GET'])
+#     def who_user_follow(self):
+#         user=self.user
+#         stars=user.following.all()
+#         # fans=user.following.all()
+#         return Response({'accounts':UserSerializer(instance=starts,many=True).data})
+#     @api_view(['GET'])
+#     def who_follow_user(self):
+#         user=self.user
+#         # fans=user.followers.all()
+#         fans=user.followers.all()
+#         return Response({'accounts':UserSerializer(instance=fans,many=True).data})

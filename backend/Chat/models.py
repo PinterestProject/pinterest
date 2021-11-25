@@ -11,4 +11,4 @@ class Chat(models.Model):
     receiver_id = models.ForeignKey(User, related_name='receiver',  on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.sender_id.name} {self.receiver_id.name}'
+        return f'{self.sender_id.username } {self.receiver_id.username }'

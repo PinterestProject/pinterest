@@ -1,12 +1,11 @@
 from django.db import models
+from Users.models import User
 
-# from Users.models import User
 from datetime import datetime
 from Categories.models import Category
 from Boards.models import Board
 
 # Create your models here.
-
 
 class Pin(models.Model):
     """
@@ -19,6 +18,7 @@ class Pin(models.Model):
     user_id = models.ForeignKey("Users.User", on_delete=models.CASCADE)
     boards = models.ManyToManyField("Boards.Board", blank=True, null=True)
     categories = models.ManyToManyField("Categories.Category", blank=True, null=True)
+
 
     def __str__(self) -> str:
         return f"{self.title}"
@@ -38,3 +38,5 @@ class Favourite(models.Model):
 
     def __str__(self):
         return f"{self.user_id.name} {self.pin_id.title}"
+
+
