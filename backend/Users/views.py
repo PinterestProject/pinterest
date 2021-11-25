@@ -10,13 +10,10 @@ from rest_framework.permissions import IsAuthenticated, BasePermission
 from rest_framework.views import APIView
 from rest_framework.authentication import TokenAuthentication
 
-<<<<<<< HEAD
-=======
-#
->>>>>>> origin/dev
+
 from rest_framework import status
 from rest_framework import serializers
-<<<<<<< HEAD
+
 
 from .serializers import UserSerializer,relationSerializer
 from .models import User,Relationship
@@ -24,12 +21,11 @@ from .permissions import UserPermissions
 
 
 
-=======
 #
 
-from .serializers import UserSerializer, InvitationSerializer
+from .serializers import UserSerializer
 #
-from .models import User, Invitation
+from .models import User
 # Create your views here.
 # User=get_user_model()
 
@@ -39,7 +35,7 @@ from .serializers import relationSerializer
 from .models import Relationship
 from .permissions import UserPermissions
 
->>>>>>> 90fbf9f85c6fbc310f287a694229ace167505044
+
 # Create your views here.
 User=get_user_model()
 
@@ -236,8 +232,7 @@ def followersList(request,pk):
     res['count'] = {len(finalList)}
     return Response(res)
 
-<<<<<<< HEAD
-=======
+
 # class RelationshipViewSet(ModelViewSet):
 #     serializer_class = RelationSerializer
 #     queryset = Relationship.objects.all()
@@ -255,6 +250,6 @@ def followersList(request,pk):
 #         # fans=user.followers.all()
 #         fans=user.followers.all()
 #         return Response({'accounts':UserSerializer(instance=fans,many=True).data})
->>>>>>> 90fbf9f85c6fbc310f287a694229ace167505044
+
 
 

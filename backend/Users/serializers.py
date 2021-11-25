@@ -6,7 +6,7 @@ from rest_framework.viewsets import ModelViewSet
 #
 from django.contrib.auth import get_user_model
 #
-from .models import User, Invitation
+from .models import User
 #
 
 from .models import User
@@ -56,10 +56,10 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 
-class InvitationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Invitation
-        fields = "__all__"
+#class InvitationSerializer(serializers.ModelSerializer):
+#    class Meta:
+#        model = Invitation
+#        fields = "__all__"
 
 class relationSerializer(serializers.ModelSerializer):
 

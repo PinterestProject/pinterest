@@ -82,23 +82,23 @@ class Relationship(models.Model):
 #     board_id = models.ForeignKey(to=Board, on_delete=models.CASCADE )
 
 
-class Invitation(models.Model):
+#class Invitation(models.Model):
 
-    collaborator = models.ForeignKey('Users.User',related_name='invitation_rel' ,on_delete=models.CASCADE, null=True, blank=True)
-    can_edit = models.BooleanField(default=True, null=True, blank=True)
-    board_id = models.ForeignKey(to=Board, on_delete=models.CASCADE, null=True, blank=True )
-    user_id = models.ForeignKey('Users.User', on_delete=models.CASCADE, null=True, blank=True)
+#    collaborator = models.ForeignKey('Users.User',related_name='invitation_rel' ,on_delete=models.CASCADE, null=True, blank=True)
+#    can_edit = models.BooleanField(default=True, null=True, blank=True)
+#    board_id = models.ForeignKey(to=Board, on_delete=models.CASCADE, null=True, blank=True )
+#    user_id = models.ForeignKey('Users.User', on_delete=models.CASCADE, null=True, blank=True)
 
     # user_board_id = models.ForeignKey(to=User_board, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return self.collaborator
+#    def __str__(self):
+#        return self.collaborator
 
 
-class User_board(models.Model):
+#class User_board(models.Model):
     # from Boards.models import Board
-    user_id = models.ForeignKey('Users.User', on_delete=models.CASCADE)
-    board_id = models.ForeignKey('Boards.Board', on_delete=models.CASCADE )
+ #   user_id = models.ForeignKey('Users.User', on_delete=models.CASCADE)
+ #   board_id = models.ForeignKey('Boards.Board', on_delete=models.CASCADE )
 
 
 
