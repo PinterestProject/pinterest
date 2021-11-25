@@ -29,7 +29,7 @@ urlpatterns=[
 
     # path('board/invite',views.invitation_create, name="create-invite"),
     # path('board/invite/<int:pk>',views.get_invitation, name="get-invite"),
-    ]
+
 
     path('relation/list',relationList),
     path('relation/delete', relationDelete),
