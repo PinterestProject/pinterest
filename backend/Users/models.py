@@ -1,18 +1,16 @@
 from django.db import models
 
-
 from Categories.models import Category
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import UserManager
 from django.contrib.auth import get_user_model
-
+from Boards.models import Board
 
 
 
 class User(AbstractBaseUser,PermissionsMixin):
-
     username = models.CharField(max_length=30)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
@@ -46,7 +44,11 @@ class User(AbstractBaseUser,PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=True)
     categories = models.ManyToManyField(Category)
+
+    #Invitations = models.ManyToManyField('Invitation')
+
     following = models.ManyToManyField('self',null=True, through='Relationship', related_name='followers', symmetrical=False)
+
 
     USERNAME_FIELD='email'
     REQUIRED_FIELDS = ['username']
@@ -74,15 +76,24 @@ class Relationship(models.Model):
 
 
 
+# class User_board(models.Model):
+#     # from Boards.models import Board
+#     user_id = models.ForeignKey('Users.User', on_delete=models.CASCADE)
+#     board_id = models.ForeignKey(to=Board, on_delete=models.CASCADE )
+
+
 class Invitation(models.Model):
 
+    collaborator = models.ForeignKey('Users.User',related_name='invitation_rel' ,on_delete=models.CASCADE, null=True, blank=True)
+    can_edit = models.BooleanField(default=True, null=True, blank=True)
+    board_id = models.ForeignKey(to=Board, on_delete=models.CASCADE, null=True, blank=True )
+    user_id = models.ForeignKey('Users.User', on_delete=models.CASCADE, null=True, blank=True)
 
-   collaborator = models.CharField(max_length=250,null=True)
-   can_edit = models.BooleanField(default=True)
-   user_board_id = models.ForeignKey('User_board', on_delete=models.CASCADE)
+    # user_board_id = models.ForeignKey(to=User_board, on_delete=models.CASCADE)
 
-   def __str__(self):
+    def __str__(self):
         return self.collaborator
+
 
 class User_board(models.Model):
     # from Boards.models import Board

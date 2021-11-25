@@ -1,15 +1,15 @@
 from django.db import models
-from Users.models import User
 
+# from Users.models import User
 from datetime import datetime
-
+from Categories.models import Category
+from Boards.models import Board
 # Create your models here.
 
 class Pin(models.Model):
     """
     Pins Table
     """
-
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     attachment = models.ImageField(upload_to="uploads/pins/")
@@ -17,10 +17,8 @@ class Pin(models.Model):
     boards = models.ManyToManyField("Boards.Board", blank=True, null=True)
     categories = models.ManyToManyField("Categories.Category", blank=True, null=True)
 
-
     def __str__(self) -> str:
         return f"{self.title}"
-
 
 class Favourite(models.Model):
 
@@ -29,12 +27,10 @@ class Favourite(models.Model):
     pin_id = models.ForeignKey(Pin, on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = (
-            "user_id",
-            "pin_id",
-        )
+
+        unique_together = ('user_id', 'pin_id',)
 
     def __str__(self):
-        return f"{self.user_id.name} {self.pin_id.title}"
+        return f"{self.user_id.username} {self.pin_id.title}"
 
 

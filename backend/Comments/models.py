@@ -9,6 +9,7 @@ class comments(models.Model):
     pin_id = models.ForeignKey(Pin, null=True, on_delete=models.SET_NULL)
     reply_content = models.TextField(default="")
 
+
     class Meta:
         verbose_name_plural = "Comments"
 
