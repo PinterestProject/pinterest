@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-!9dy@jmp_9q3a9y&zb2j(tt9hyqbq+o*f@bi9*km)cn1n+&u&!'
 secrets = dotenv_values(f'{BASE_DIR}/.env')
-
+print(secrets)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
