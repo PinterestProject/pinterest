@@ -46,12 +46,15 @@ class User(AbstractBaseUser,PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=True)
     categories = models.ManyToManyField(Category)
-    following = models.ManyToManyField('self', through='Relationship', related_name='followers', symmetrical=False)
+    following = models.ManyToManyField('self',null=True, through='Relationship', related_name='followers', symmetrical=False)
 
     USERNAME_FIELD='email'
     REQUIRED_FIELDS = ['username']
 
     objects=UserManager()
+
+    class Meta:
+        ordering=('-id',)
 
     def __str__(self):
         return self.email
@@ -64,6 +67,7 @@ class Relationship(models.Model):
 
     class Meta:
         ordering = ('-created',)
+        unique_together=('follower_id','followed_id')
 
     def __str__(self):
         return '{} follows {}'.format(self.follower_id,self.followed_id)

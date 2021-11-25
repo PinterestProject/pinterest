@@ -9,6 +9,7 @@ from rest_framework.authentication import TokenAuthentication
 
 from rest_framework import status
 from rest_framework import serializers
+<<<<<<< HEAD
 
 from .serializers import UserSerializer,relationSerializer
 from .models import User,Relationship
@@ -16,6 +17,18 @@ from .permissions import UserPermissions
 
 
 
+=======
+#
+
+from .serializers import UserSerializer,relationSerializer
+
+
+# from .serializers import RelationSerializer
+from .models import User
+from .models import Relationship
+from .permissions import UserPermissions
+
+>>>>>>> 90fbf9f85c6fbc310f287a694229ace167505044
 # Create your views here.
 User=get_user_model()
 class UserViewSet(ModelViewSet):
@@ -41,12 +54,8 @@ class UserViewSet(ModelViewSet):
         return Response({'message':user.errors})
 
     def partial_update(self, request, *args, **kwargs):
-        # print(request.user.email)
         user = User.objects.get(pk=kwargs['pk'])
         self.check_object_permissions(request,user)
-        # return Response({"hhh":'hhhh'})
-
-        # print(user.email)
         user_serialized = UserSerializer(instance=user,data=request.data,partial=True)
 
         if user_serialized.is_valid():
@@ -96,6 +105,7 @@ class UserChangePasswordHandler():
 
 
 
+
 ## relationship views ##
 
 @api_view(['GET'])
@@ -126,7 +136,7 @@ def followedsList(request,pk):
     flist = serialized_rel.data
     filter_result = filter(lambda d: d.get('follower_id') == pk, flist)
     finalList=list(filter_result)
-    res['followed']= finalList
+    res['followeds']= finalList
     res['count'] = {len(finalList)}
     return Response(res)
 
@@ -139,8 +149,28 @@ def followersList(request,pk):
     flist = serialized_rel.data
     filter_result = filter(lambda d: d.get('followed_id') == pk, flist)
     finalList = list(filter_result)
-    res['followed'] = finalList
+    res['followers'] = finalList
     res['count'] = {len(finalList)}
     return Response(res)
 
+<<<<<<< HEAD
+=======
+# class RelationshipViewSet(ModelViewSet):
+#     serializer_class = RelationSerializer
+#     queryset = Relationship.objects.all()
+
+# class UserFollowing():
+#     @api_view(['GET'])
+#     def who_user_follow(self):
+#         user=self.user
+#         stars=user.following.all()
+#         # fans=user.following.all()
+#         return Response({'accounts':UserSerializer(instance=starts,many=True).data})
+#     @api_view(['GET'])
+#     def who_follow_user(self):
+#         user=self.user
+#         # fans=user.followers.all()
+#         fans=user.followers.all()
+#         return Response({'accounts':UserSerializer(instance=fans,many=True).data})
+>>>>>>> 90fbf9f85c6fbc310f287a694229ace167505044
 
