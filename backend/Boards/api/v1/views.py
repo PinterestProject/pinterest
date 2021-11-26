@@ -1,5 +1,6 @@
 from django.http import Http404
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from Boards.models import Board
@@ -10,6 +11,8 @@ class BoardList(APIView):
     """
     List all boards, or create a new board.
     """
+
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, format=None):
         boards = Board.objects.all()
@@ -28,6 +31,8 @@ class BoardDetails(APIView):
     """
     Retrieve, update or delete a board instance.
     """
+
+    permission_classes = (IsAuthenticated,)
 
     def get_object(self, pk):
         try:

@@ -1,11 +1,10 @@
 from django.http import Http404
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
 from Pins.models import Pin
 from .serializers import PinSerializer
-
 
 
 class PinList(APIView):
@@ -21,7 +20,8 @@ class PinList(APIView):
         return Response(data=serialized_pins.data, status=status.HTTP_200_OK)
 
     def post(self, request, format=None):
-        request.data['user_id'] = request.user.id
+        # use user_id from request data as required pin author user_id
+        request.data["user_id"] = request.user.id
         serialized_pin = PinSerializer(data=request.data)
         if serialized_pin.is_valid():
             serialized_pin.save()
@@ -52,6 +52,7 @@ class PinDetails(APIView):
         # if and only if user is the pin author
         print(f"{request.user.email = }")
         print(f"{str(pin.user_id) = }")
+        # pin.user_id returns the user email instead of user id 🤷‍♂️
         if request.user.email == str(pin.user_id):
             serialized_pin = PinSerializer(pin, data=request.data, partial=True)
             if serialized_pin.is_valid():
@@ -63,6 +64,7 @@ class PinDetails(APIView):
     def put(self, request, pk, format=None):
         pin = self.get_object(pk)
         # if and only if user is the pin author
+        # pin.user_id returns the user email instead of user id 🤷‍♂️
         if request.user.email == str(pin.user_id):
             serialized_pin = PinSerializer(pin, data=request.data)
             if serialized_pin.is_valid():
@@ -74,6 +76,7 @@ class PinDetails(APIView):
     def delete(self, request, pk, format=None):
         pin = self.get_object(pk)
         # if and only if user is the pin author
+        # pin.user_id returns the user email instead of user id 🤷‍♂️
         if request.user.email == str(pin.user_id):
             pin.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
