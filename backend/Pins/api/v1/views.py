@@ -2,8 +2,10 @@ from django.http import Http404
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 from Pins.models import Pin
 from .serializers import PinSerializer
+
 
 
 class PinList(APIView):
@@ -11,12 +13,15 @@ class PinList(APIView):
     List all pins, or create a new pin.
     """
 
+    permission_classes = (IsAuthenticated,)
+
     def get(self, request, format=None):
         pins = Pin.objects.all()
         serialized_pins = PinSerializer(instance=pins, many=True)
         return Response(data=serialized_pins.data, status=status.HTTP_200_OK)
 
     def post(self, request, format=None):
+        request.data['user_id'] = request.user.id
         serialized_pin = PinSerializer(data=request.data)
         if serialized_pin.is_valid():
             serialized_pin.save()
@@ -28,6 +33,8 @@ class PinDetails(APIView):
     """
     Retrieve, update or delete a pin instance.
     """
+
+    permission_classes = (IsAuthenticated,)
 
     def get_object(self, pk):
         try:
@@ -42,21 +49,32 @@ class PinDetails(APIView):
 
     def patch(self, request, pk, format=None):
         pin = self.get_object(pk)
-        serialized_pin = PinSerializer(pin, data=request.data, partial=True)
-        if serialized_pin.is_valid():
-            serialized_pin.save()
-            return Response(serialized_pin.data)
-        return Response(serialized_pin.errors, status=status.HTTP_400_BAD_REQUEST)
+        # if and only if user is the pin author
+        print(f"{request.user.email = }")
+        print(f"{str(pin.user_id) = }")
+        if request.user.email == str(pin.user_id):
+            serialized_pin = PinSerializer(pin, data=request.data, partial=True)
+            if serialized_pin.is_valid():
+                serialized_pin.save()
+                return Response(serialized_pin.data)
+            return Response(serialized_pin.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
 
     def put(self, request, pk, format=None):
         pin = self.get_object(pk)
-        serialized_pin = PinSerializer(pin, data=request.data)
-        if serialized_pin.is_valid():
-            serialized_pin.save()
-            return Response(serialized_pin.data)
-        return Response(serialized_pin.errors, status=status.HTTP_400_BAD_REQUEST)
+        # if and only if user is the pin author
+        if request.user.email == str(pin.user_id):
+            serialized_pin = PinSerializer(pin, data=request.data)
+            if serialized_pin.is_valid():
+                serialized_pin.save()
+                return Response(serialized_pin.data)
+            return Response(serialized_pin.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
 
     def delete(self, request, pk, format=None):
         pin = self.get_object(pk)
-        pin.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        # if and only if user is the pin author
+        if request.user.email == str(pin.user_id):
+            pin.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
