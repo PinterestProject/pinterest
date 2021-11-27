@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from Pins.models import Pin
 from .serializers import PinSerializer
+# from Users.models import User
 
 
 class PinList(APIView):
@@ -45,6 +46,7 @@ class PinDetails(APIView):
     def get(self, request, pk, format=None):
         pin = self.get_object(pk)
         serialized_pin = PinSerializer(pin)
+        # print(f"{User.objects.get(id=serialized_pin.data['user_id']).username }")
         return Response(serialized_pin.data)
 
     def patch(self, request, pk, format=None):
