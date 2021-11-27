@@ -24,9 +24,9 @@ class BoardList(APIView):
 
     def post(self, request, format=None):
         # use user id from request data as required board creator id
-        request.data._mutable = True
+        # request.data._mutable = True
         request.data["created_by"] = request.user.id
-        request.data._mutable = False
+        # request.data._mutable = False
         serialized_board = BoardSerializer(data=request.data)
         if serialized_board.is_valid():
             serialized_board.save()
