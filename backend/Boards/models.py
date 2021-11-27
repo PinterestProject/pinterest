@@ -1,4 +1,5 @@
 from django.db import models
+
 # from Pins.models import Pin
 # from Users.models import User
 
@@ -18,6 +19,9 @@ class Board(models.Model):
     is_public = models.BooleanField(default=True)
     is_archived = models.BooleanField(default=False)
     # pins = models.ManyToManyField(Pin)
+
+    class Meta:
+        ordering = ["-created_at"]
 
     def __str__(self) -> str:
         return f"{self.name}"
