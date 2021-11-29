@@ -56,7 +56,8 @@ INSTALLED_APPS = [
     'Comments',
     'rest_framework',
     'corsheaders',
-    'rest_framework.authtoken',
+    'rest_framework.authtoken'
+
 ]
 
 MIDDLEWARE = [
@@ -159,4 +160,4 @@ REST_FRAMEWORK = {
     ]
 }
 
-
+CORS_ALLOW_ALL_ORIGINS=True
