@@ -43,7 +43,7 @@ class User(AbstractBaseUser,PermissionsMixin):
     date_joined = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=True)
-    categories = models.ManyToManyField(Category)
+    categories = models.ManyToManyField(Category,blank=True)
 
     #Invitations = models.ManyToManyField('Invitation')
 

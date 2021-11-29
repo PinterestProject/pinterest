@@ -22,6 +22,7 @@ class PinList(APIView):
 
     def post(self, request, format=None):
         # use user_id from request data as required pin author user_id
+        # request.data._mutable=True
         request.data["user_id"] = request.user.id
         serialized_pin = PinSerializer(data=request.data)
         if serialized_pin.is_valid():
