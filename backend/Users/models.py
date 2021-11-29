@@ -17,7 +17,7 @@ class User(AbstractBaseUser,PermissionsMixin):
     password = models.CharField(max_length=255)
     password_conf = models.CharField(max_length=255,default="")
     email = models.EmailField(max_length=225,unique=True)
-    birth_day = models.DateField(null=True)
+    birth_day = models.DateField(null=True, blank=True)
 
     gender = models.TextField(choices=[
         ('male', 'Male'),
@@ -43,7 +43,7 @@ class User(AbstractBaseUser,PermissionsMixin):
     date_joined = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=True)
-    categories = models.ManyToManyField(Category)
+    categories = models.ManyToManyField(Category,null=True,blank=True)
 
     #Invitations = models.ManyToManyField('Invitation')
 
@@ -95,10 +95,10 @@ class Invitation(models.Model):
         return self.collaborator
 
 
-class User_board(models.Model):
-    # from Boards.models import Board
-    user_id = models.ForeignKey('Users.User', on_delete=models.CASCADE)
-    board_id = models.ForeignKey('Boards.Board', on_delete=models.CASCADE )
+# class User_board(models.Model):
+#     # from Boards.models import Board
+#     user_id = models.ForeignKey('Users.User', on_delete=models.CASCADE)
+#     board_id = models.ForeignKey('Boards.Board', on_delete=models.CASCADE )
 
 
 
