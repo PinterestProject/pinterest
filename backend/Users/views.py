@@ -107,8 +107,8 @@ class UserRegisterHandler():
             user.save()
             created_user=User.objects.get(email=user.data['email'])
             token=Token.objects.create(user=created_user)
-            return Response({'user_token':token.key})
-        return Response({'message':user.errors})
+            return Response({'user_token':token.key},status=status.HTTP_201_CREATED)
+        return Response({'message':user.errors},status=status.HTTP_400_BAD_REQUEST)
 
     @api_view(['POST'])
     def logout(request):
@@ -119,13 +119,13 @@ class UserRegisterHandler():
 
 class UserChangePasswordHandler():
     @api_view(['POST'])
-    def change_password(request,old_password):
+    def change_password(request):
 
         if request.user.check_password(request.data['old_pass']) :
             request.user.set_password(request.data['new_password'])
             request.user.save()
-            return Response({"message":"password updated!"})
-        return Response({"message ":request.user.check_password(request.data['old_pass'])})
+            return Response({"message":"password updated!"},status=status.HTTP_200_OK)
+        return Response({"message ":request.user.check_password(request.data['old_pass'])},status=status.HTTP_400_BAD_REQUEST)
 
 
 
