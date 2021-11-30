@@ -84,3 +84,13 @@ class PinDetails(APIView):
             pin.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+from rest_framework.decorators import api_view
+
+@api_view(['GET'])
+def get_board_pins(request, pk):
+    pins = Pin.objects.filter(boards = pk)
+    serialized_pins = PinSerializer(pins, many=True)
+    print(f"{len(serialized_pins.data)} = ")
+    return Response(data=serialized_pins.data, status=status.HTTP_200_OK)
+    
