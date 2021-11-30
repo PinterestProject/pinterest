@@ -29,7 +29,8 @@ class UserSerializer(serializers.ModelSerializer):
             'groups',
             'user_permissions',
             'history',
-            'following'
+            'following',
+            'categories'
             )
         extra_kwargs = {
             'password': {'write_only': True},

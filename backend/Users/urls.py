@@ -15,6 +15,7 @@ from .views import relationList, relationDelete,followedsList, followersList
 router=DefaultRouter()
 
 router.register('users',views.UserViewSet,basename='users')
+router.register('follow',views.RelationshipViewSet,basename='follow')
 # router.register('users',views.signup,basename='users')
 # router.register('invitation',views,basename='invitation')
 
