@@ -1,6 +1,6 @@
 from django.db import models
 
-# from Pins.models import Pin
+from Pins.models import Pin
 # from Users.models import User
 
 
@@ -18,7 +18,7 @@ class Board(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     is_public = models.BooleanField(default=True)
     is_archived = models.BooleanField(default=False)
-    # pins = models.ManyToManyField(Pin)
+    pins = models.ManyToManyField(Pin, blank=True, null=True)
 
     class Meta:
         ordering = ["-created_at"]
