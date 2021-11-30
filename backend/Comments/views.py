@@ -14,25 +14,20 @@ class comment_api(APIView):
 
     def get(self,request,pk, *args,**kwargs):
         response = {}
-        comment = comments.objects.filter(pk=pk)
-        if comment.exists():
-            comment = comment.first()
-            serializer = CommentSerializer(instance=comment)
-
-            response['data'] = serializer.data
-            response['status'] = status.HTTP_200_OK
-        else:
-            response['data'] = {'message': 'failed Comment does not exist'}
-            response['status'] = status.HTTP_400_BAD_REQUEST
-
+        comment = comments.objects.filter(pin_id=pk)
+        users=[{"id":i.user_id.id,"username":i.user_id.username} for i in comment]
+        serializer = CommentSerializer(instance=comment,many=True)
+        response['data'] = {'data':serializer.data,'users':users}
+        response['status'] = status.HTTP_200_OK
         return Response(**response)
 
 
     def post(self,request, *args,**kwargs):
-        serializers = CommentSerializer(data=request.data,many=True)
-        print(serializers)
+        request.data['user_id']=request.user.id
+        serializers = CommentSerializer(data=request.data)
+        # print(serializers)
         if serializers.is_valid():
-            print(serializers)
+            print("serializers")
             serializers.save()
             return Response({'message': serializers.data})
         return Response({'message': serializers.errors})

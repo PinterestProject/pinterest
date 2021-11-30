@@ -23,7 +23,7 @@ from .models import User, Invitation
 
 from .serializers import relationSerializer
 
-# from .serializers import RelationSerializer
+from .serializers import RelationSerializer
 from .models import Relationship
 from .permissions import UserPermissions
 
@@ -223,9 +223,18 @@ def followersList(request,pk):
     res['count'] = {len(finalList)}
     return Response(res)
 
-# class RelationshipViewSet(ModelViewSet):
-#     serializer_class = RelationSerializer
-#     queryset = Relationship.objects.all()
+class RelationshipViewSet(ModelViewSet):
+     serializer_class = RelationSerializer
+     queryset = Relationship.objects.all()
+
+     def create(self, request, *args, **kwargs):
+         print(request.data)
+         request.data['follower_id']=request.user.id
+         relation=RelationSerializer(data=request.data)
+         if relation.is_valid():
+             relation.save()
+             return Response({'message':status.HTTP_201_CREATED})
+         return Response({'message':status.HTTP_400_BAD_REQUEST})
 
 # class UserFollowing():
 #     @api_view(['GET'])
