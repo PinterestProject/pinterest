@@ -1,10 +1,12 @@
 from django.http import Http404
 from rest_framework import status
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from Pins.models import Pin
 from .serializers import PinSerializer
+
 # from Users.models import User
 
 
@@ -85,12 +87,11 @@ class PinDetails(APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
-from rest_framework.decorators import api_view
 
-@api_view(['GET'])
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def get_board_pins(request, pk):
-    pins = Pin.objects.filter(boards = pk)
+    pins = Pin.objects.filter(boards=pk)
     serialized_pins = PinSerializer(pins, many=True)
     print(f"{len(serialized_pins.data)} = ")
     return Response(data=serialized_pins.data, status=status.HTTP_200_OK)
-    
