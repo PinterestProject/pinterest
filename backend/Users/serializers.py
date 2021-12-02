@@ -6,7 +6,11 @@ from rest_framework.viewsets import ModelViewSet
 #
 from django.contrib.auth import get_user_model
 #
-from .models import User, Invitation, Relationship
+from .models import User, Invitation
+#
+
+from .models import User
+from .models import Relationship
 
 #
 User = get_user_model()

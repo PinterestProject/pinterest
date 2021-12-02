@@ -57,7 +57,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'rest_framework.authtoken'
-
 ]
 
 MIDDLEWARE = [
@@ -72,10 +71,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'Pinterest.urls'
-
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3001',
-]
 
 TEMPLATES = [
     {
