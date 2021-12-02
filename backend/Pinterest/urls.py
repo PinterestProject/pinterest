@@ -18,6 +18,7 @@ from django.urls import path, include
 from django.conf import settings
 
 
+
 #todo:front#3
 from django.views.generic import TemplateView
 urlpatterns = [
