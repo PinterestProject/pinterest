@@ -3,7 +3,7 @@ from django.db import models
 # from Users.models import User
 from datetime import datetime
 from Categories.models import Category
-# from Boards.models import Board
+from Boards.models import Board
 # Create your models here.
 
 class Pin(models.Model):
@@ -12,8 +12,8 @@ class Pin(models.Model):
     """
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
-    attachment = models.ImageField(upload_to="uploads/pins/", null=True)
-    user_id = models.ForeignKey("Users.User", on_delete=models.CASCADE)
+    attachment = models.ImageField(upload_to="uploads/pins/" ,null=True)
+    user_id = models.ForeignKey("Users.User", on_delete=models.CASCADE )
     boards = models.ManyToManyField("Boards.Board", blank=True, null=True)
     categories = models.ManyToManyField("Categories.Category", blank=True, null=True)
 

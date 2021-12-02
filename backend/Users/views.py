@@ -132,7 +132,8 @@ class UserChangePasswordHandler():
             request.user.set_password(request.data['new_password'])
             request.user.save()
             return Response({"message":"password updated!"},status=status.HTTP_200_OK)
-        return Response({"message ":request.usercheck_password(request.data['old_pass'])},status=status.HTTP_400_BAD_REQUEST)
+        return Response({"message ":request.user.check_password(request.data['old_pass'])},status=status.HTTP_400_BAD_REQUEST)
+
 
 
 
