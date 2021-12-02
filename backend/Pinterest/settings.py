@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 from pathlib import Path
-from dotenv import dotenv_values
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,17 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-!9dy@jmp_9q3a9y&zb2j(tt9hyqbq+o*f@bi9*km)cn1n+&u&!'
-secrets = dotenv_values(f'{BASE_DIR}/.env')
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': secrets['NAME'],
-        'USER': secrets['USER'],
-        'PASSWORD': secrets['PASSWORD'],
-        'HOST': secrets['HOST'],
-        'PORT': secrets['PORT'],
-    }
-}
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -53,17 +42,12 @@ INSTALLED_APPS = [
     'Pins',
     'Categories',
     'Chat',
-    'Comments',
-    'rest_framework',
-    'corsheaders',
-    'rest_framework.authtoken'
-
+    'Comments'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -73,17 +57,10 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'Pinterest.urls'
 
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3001',
-]
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            #todo:front#1
-            f'{secrets["BASE_DIR"]}{secrets["FRONT_NAME"]}{secrets["BUILD"]}'
-        ],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -102,6 +79,17 @@ WSGI_APPLICATION = 'Pinterest.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'pinterest',
+        'USER': 'postgres',
+        'PASSWORD':'691999',
+        'HOST':'localhost',
+        'PORT': '5432'
+
+    }
+}
 
 
 # Password validation
@@ -141,8 +129,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-#todo:front#2
-STATICFILES_DIRS=[f'{secrets["BASE_DIR"]}{secrets["FRONT_NAME"]}{secrets["STATIC"]}']
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -153,11 +140,3 @@ AUTH_USER_MODEL='Users.User'
 
 MEDIA_URL='/media/'
 MEDIA_ROOT=os.path.join(BASE_DIR,'media')
-
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
-    ]
-}
-
-CORS_ALLOW_ALL_ORIGINS=True
