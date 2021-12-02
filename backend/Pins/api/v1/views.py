@@ -95,3 +95,12 @@ def get_board_pins(request, pk):
     serialized_pins = PinSerializer(pins, many=True)
     print(f"{len(serialized_pins.data)} = ")
     return Response(data=serialized_pins.data, status=status.HTTP_200_OK)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_user_pins(request):
+    pins = Pin.objects.filter(user_id=request.user.id)
+    serialized_pins = PinSerializer(instance=pins, many=True)
+    print(f"{len(serialized_pins.data)} = ")
+    return Response(data=serialized_pins.data, status=status.HTTP_200_OK)
