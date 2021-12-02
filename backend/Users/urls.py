@@ -26,6 +26,7 @@ urlpatterns=[
     path('logout/',views.UserRegisterHandler.logout),
     path('login/',obtain_auth_token),
     path('changepassword/',views.UserChangePasswordHandler.change_password),
+    path('user-details/',views.UserChangePasswordHandler.profile_data),
     path('board/invite/', views.InvitationList.as_view(), name="create-invite"),
 
     # path('board/invite',views.invitation_create, name="create-invite"),

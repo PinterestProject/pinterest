@@ -95,6 +95,13 @@ class UserViewSet(ModelViewSet):
 
 
 class UserRegisterHandler():
+    @api_view(['GET'])
+    def profile_data(request):
+        user_id = request.user.id
+        user = UserSerializer(instance=User.objects.get(pk=user_id))
+        return Response({'data': user.data}, status=status.HTTP_200_OK)
+
+
     @api_view(['POST'])
     def signup(request):
 
