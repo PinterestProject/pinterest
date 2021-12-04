@@ -4,6 +4,8 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from Boards.api.v1.serializers import BoardSerializer
+from Boards.models import Board
 from Pins.models import Pin
 from .serializers import PinSerializer
 
@@ -92,9 +94,11 @@ class PinDetails(APIView):
 @permission_classes([IsAuthenticated])
 def get_board_pins(request, pk):
     pins = Pin.objects.filter(boards=pk)
+    board = Board.objects.get(id=pk)
     serialized_pins = PinSerializer(pins, many=True)
+    serialized_board = BoardSerializer(board)
     print(f"{len(serialized_pins.data)} = ")
-    return Response(data=serialized_pins.data, status=status.HTTP_200_OK)
+    return Response(data=(serialized_board.data,serialized_pins.data), status=status.HTTP_200_OK)
 
 
 @api_view(["GET"])
