@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from Pins.models import Pin
 from .serializers import PinSerializer
-
+from rest_framework.decorators import api_view
 # from Users.models import User
 
 
@@ -94,8 +94,7 @@ def get_board_pins(request, pk):
     pins = Pin.objects.filter(boards=pk)
     serialized_pins = PinSerializer(pins, many=True)
     print(f"{len(serialized_pins.data)} = ")
-    return Response(data=serialized_pins.data, status=status.HTTP_200_OK)
-
+    return Response(data=serialized_pins.data, status=status.HTTP_200_OK) 
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
@@ -104,3 +103,38 @@ def get_user_pins(request):
     serialized_pins = PinSerializer(instance=pins, many=True)
     print(f"{len(serialized_pins.data)} = ")
     return Response(data=serialized_pins.data, status=status.HTTP_200_OK)
+
+
+
+#filter pin 
+
+def catePins (pk):
+    returnData=[]
+    pins = Pin.objects.all()
+    serialized_pins = PinSerializer(instance=pins, many=True)
+    
+    pin_list =serialized_pins.data
+    
+    for pin in pin_list :
+        cate_pin=pin["categories"]
+        for ele in cate_pin:
+            if (ele == pk):
+                returnData.append(pin)          
+    return returnData
+
+def Convert(string):
+    li = list(string.split(","))
+    return li
+
+@api_view(['POST']) 
+def pinsOfSpecificCategory (request):
+    finalPins=[]
+    data=Convert(request.data["categories"])
+    for i in range(len(data)):
+       lis= catePins(int(data[i]))
+       for x in range(len(lis)):
+          finalPins.append(lis[x])
+    print(finalPins)
+    return Response(finalPins)        
+
+
