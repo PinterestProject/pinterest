@@ -9,8 +9,6 @@ from Boards.models import Board
 from Pins.models import Pin
 from .serializers import PinSerializer
 
-# from Users.models import User
-
 
 class PinList(APIView):
     """
@@ -97,8 +95,9 @@ def get_board_pins(request, pk):
     board = Board.objects.get(id=pk)
     serialized_pins = PinSerializer(pins, many=True)
     serialized_board = BoardSerializer(board)
-    print(f"{len(serialized_pins.data)} = ")
-    return Response(data=(serialized_board.data,serialized_pins.data), status=status.HTTP_200_OK)
+    return Response(
+        data=(serialized_board.data, serialized_pins.data), status=status.HTTP_200_OK
+    )
 
 
 @api_view(["GET"])
@@ -108,3 +107,38 @@ def get_user_pins(request):
     serialized_pins = PinSerializer(instance=pins, many=True)
     print(f"{len(serialized_pins.data)} = ")
     return Response(data=serialized_pins.data, status=status.HTTP_200_OK)
+
+
+# filter pin
+
+
+def catePins(pk):
+    returnData = []
+    pins = Pin.objects.all()
+    serialized_pins = PinSerializer(instance=pins, many=True)
+
+    pin_list = serialized_pins.data
+
+    for pin in pin_list:
+        cate_pin = pin["categories"]
+        for ele in cate_pin:
+            if ele == pk:
+                returnData.append(pin)
+    return returnData
+
+
+def Convert(string):
+    li = list(string.split(","))
+    return li
+
+
+@api_view(["POST"])
+def pinsOfSpecificCategory(request):
+    finalPins = []
+    data = Convert(request.data["categories"])
+    for i in range(len(data)):
+        lis = catePins(int(data[i]))
+        for x in range(len(lis)):
+            finalPins.append(lis[x])
+    print(finalPins)
+    return Response(finalPins)
