@@ -107,16 +107,18 @@ def get_user_board_pins(request):
     serialized_board = BoardSerializer(boards, many=True)
     print(serialized_board.data, len(serialized_board.data))
     if len(serialized_board.data) > 0:
-        board_id = []
-        for bo in serialized_board.data:
-            board_id.append(bo["id"])
-            # pins = Pin.objects.filter(boards=bo["id"])
-
-        pins = Pin.objects.filter(boards__in=board_id)
-        serialized_pins = PinSerializer(pins, many=True)
+        # board_ids = [bo["id"] for bo in serialized_board.data]
+        # print(f"{board_ids= }")
         data = {}
-        data["boards"] = serialized_board.data
-        data["pins"] = serialized_pins.data
+        # data["boards"] = {}
+        for bo in serialized_board.data:
+            # board_ids.append(bo["id"])
+            # pins = Pin.objects.filter(boards=bo["id"])
+            board_id = bo["id"]
+            pins = Pin.objects.filter(boards=board_id)
+            serialized_pins = PinSerializer(pins, many=True)
+            data[f"board {bo['id']}"] = bo
+            data[f"board {bo['id']}"].update({"pins": serialized_pins.data})
         return Response(data, status=status.HTTP_200_OK)
     return Response(data=(serialized_board.data), status=status.HTTP_200_OK)
 
